@@ -1,0 +1,74 @@
+﻿<Window x:Class="NoteEditor.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        WindowStyle="None" Background="Transparent" 
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        AllowsTransparency="True"
+        Height="{Binding WindowHeight}" Width="{Binding WindowWidth}"
+        MaxHeight="{x:Static SystemParameters.VirtualScreenHeight}"
+        WindowState="{Binding WindowState}"
+        Left="{Binding WindowLeft}"
+        Top="{Binding WindowTop}"
+        ResizeMode="CanResizeWithGrip"
+        >
+    <Grid>
+        <!--Definitions-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding RegionRelationSize}" />
+            <ColumnDefinition Width="{Binding RegionSplitterSize}"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--Title Bar-->
+        <Grid Grid.Row="0" Grid.RowSpan="1" Grid.ColumnSpan="3" Background="Transparent">
+            <Behaviors:Interaction.Triggers>
+                <Behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                    <Behaviors:InvokeCommandAction Command="{Binding TitlebarClick}" PassEventArgsToCommand="True"/>
+                </Behaviors:EventTrigger>
+                <Behaviors:KeyTrigger Key="F11">
+                    <Behaviors:InvokeCommandAction Command="{Binding MaxNormalize}"/>
+                </Behaviors:KeyTrigger>
+            </Behaviors:Interaction.Triggers>
+            
+            <Grid Style="{StaticResource TitlebarColor}"/>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Style="{StaticResource TitleBarFont}" Text="{Binding Title}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                <TextBlock Style="{StaticResource TitleBarOpenFileFont}" Text="{Binding Editor.OpenFile}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+            </StackPanel>
+            <Separator Background="#6a6a6a" VerticalAlignment="Bottom">
+                <Separator.RenderTransform>
+                    <ScaleTransform ScaleY="0.1" />
+                </Separator.RenderTransform>
+            </Separator>
+            <!--Buttons-->
+            <Grid Width="120" Height="30"  HorizontalAlignment="Right" VerticalAlignment="Top">
+                <!--Minimize/Maximize Button-->
+                <Grid Style="{StaticResource MinMaximizeHighlight}" Width="80" HorizontalAlignment="Left">
+                    <Button Style="{StaticResource MinMaximizeButton}" Width="40" HorizontalAlignment="Right" Margin="0,0,40,0" Background="#1a1a1a" Command="{Binding Minimize}"/>
+                    <Button Style="{StaticResource MinMaximizeButton}" Width="40" HorizontalAlignment="Right" Margin="0,0,0,0" Background="#1a1a1a" Command="{Binding MaxNormalize}"/>
+                </Grid>
+                <TextBlock Style="{StaticResource TitleBarFont}" IsHitTestVisible="False" x:Name="Minimize_Textblock" Margin="0,0,80,0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="-"/>
+                <TextBlock Style="{StaticResource TitleBarFont}" IsHitTestVisible="False" Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding MaxNormalizeText}"/>
+                <!--Exit Button-->
+                <Grid Style="{StaticResource ExitHighlight}" Width="40" HorizontalAlignment="Right">
+                    <Button x:Name="Exit_Button" Style="{StaticResource ExitButton}" Width="40" HorizontalAlignment="Right" Margin="0,0,0,0"  Background="#1a1a1a" Command="{Binding Exit}"/>
+                </Grid>
+                <TextBlock Style="{StaticResource TitleBarFont}" IsHitTestVisible="False" Margin="0,0,15,0" VerticalAlignment="Center" HorizontalAlignment="Right" Text="✕"/>
+            </Grid>
+        </Grid>
+
+        <!--Regions-->
+        <ContentControl prism:RegionManager.RegionName="MenuBarRegion" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" />
+        <ContentControl prism:RegionManager.RegionName="NotesTreeRegion" Grid.Column="0" Grid.Row="2" />
+        <GridSplitter   Grid.Column="1" Grid.Row="2" Width="{Binding RegionSplitterSize}" HorizontalAlignment="Stretch"/>
+        <ContentControl prism:RegionManager.RegionName="NotesRegion" Grid.Column="2" Grid.Row="2" />
+    </Grid>
+</Window>

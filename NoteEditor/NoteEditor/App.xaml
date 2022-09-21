@@ -1,0 +1,107 @@
+﻿<prism:PrismApplication x:Class="NoteEditor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/">
+    <Application.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="Add" UriSource="assets\add.ico"/>
+            <BitmapImage x:Key="Filter" UriSource="assets\filter.ico"/>
+            <BitmapImage x:Key="Note" UriSource="assets\note.ico"/>
+            <BitmapImage x:Key="Delete" UriSource="assets\delete.ico"/>
+            <BitmapImage x:Key="Copy" UriSource="assets\copy.ico"/>
+            <BitmapImage x:Key="Paste" UriSource="assets\paste.ico"/>
+            <BitmapImage x:Key="Cut" UriSource="assets\cut.ico"/>
+            <BitmapImage x:Key="Find" UriSource="assets\find.ico"/>
+            <!--Titlebar-->
+            <SolidColorBrush x:Key="MinMaximizeHighlight_Color" Color="White"/>
+            <SolidColorBrush x:Key="ExitHighlight_Color" Color="Red"/>
+            <SolidColorBrush x:Key="Titlebar_Color" Color="#1a1a1a"/>
+            <SolidColorBrush x:Key="TitlebarFont_Color" Color="Silver"/>
+            <!--Menubar-->
+            <SolidColorBrush x:Key="Menubar_Color" Color="#dadada"/>
+            <SolidColorBrush x:Key="MenubarFont_Color" Color="Silver"/>
+            <SolidColorBrush x:Key="SubMenuItemFont_Color" Color="Silver"/>
+            <SolidColorBrush x:Key="Seperator_Color" Color="Silver"/>
+            <!--Grid-->
+            <SolidColorBrush x:Key="GridStyle0_Color" Color="#2a2a2a"/>
+
+
+            <!--Changes the Style of the titlebar minimize/maximize buttons.-->
+            <Style x:Key="MinMaximizeButton" TargetType="Button">
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Cursor" Value="Arrow"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="0.8"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="MinMaximizeHighlight" TargetType="Grid">
+                <Setter Property="Background" Value="{DynamicResource MinMaximizeHighlight_Color}"/>
+            </Style>
+
+            <!--Changes the Style of the titlebar exit.-->
+            <Style x:Key="ExitButton" TargetType="Button">
+                <Setter Property="OverridesDefaultStyle" Value="True"/>
+                <Setter Property="Cursor" Value="Arrow"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Opacity" Value="0.4"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="ExitHighlight" TargetType="Grid">
+                <Setter Property="Background" Value="{DynamicResource ExitHighlight_Color}"/>
+            </Style>
+
+            <!--Changes the color of the titlebar.-->
+            <Style x:Key="TitlebarColor" TargetType="Grid">
+                <Setter Property="Background" Value="{DynamicResource Titlebar_Color}"/>
+            </Style>
+
+            <Style x:Key="TitleBarFont" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource TitlebarFont_Color}"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="DemiBold"/>
+                <Setter Property="FontStyle" Value="Normal"/>
+            </Style>
+
+            <Style x:Key="TitleBarOpenFileFont" TargetType="TextBlock">
+                <Setter Property="Foreground" Value="{DynamicResource TitlebarFont_Color}"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="FontWeight" Value="DemiBold"/>
+                <Setter Property="FontStyle" Value="Normal"/>
+            </Style>
+            
+            
+            <Style x:Key="GridStyle0" TargetType="Grid">
+                <Setter Property="Background" Value="{DynamicResource GridStyle0_Color}"/>
+            </Style>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</prism:PrismApplication>

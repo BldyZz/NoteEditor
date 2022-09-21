@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="NoteEditor.Modules.Notes.Views.NotesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:NoteEditor.Modules.Notes.Views"
+             xmlns:Behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True" 
+             >
+        <UserControl.Resources>
+            <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">Slide</PopupAnimation>
+        </UserControl.Resources>
+        <!--Editor region-->
+        <Grid Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="1" Grid.RowSpan="1" >
+            <xctk:RichTextBox x:Name="rtb" VerticalScrollBarVisibility="Auto"
+                         AcceptsReturn="True" SelectionChanged="{Binding }"
+                         Text="{Binding Editor.Content, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                         >
+                <xctk:RichTextBox.TextFormatter>
+                    <xctk:XamlFormatter/>
+                </xctk:RichTextBox.TextFormatter>
+                
+                <Behaviors:Interaction.Triggers >
+                    <Behaviors:EventTrigger EventName="SelectionChanged">
+                        <Behaviors:InvokeCommandAction Command="{Binding SelectionChanged}" PassEventArgsToCommand="True"/>
+                    </Behaviors:EventTrigger>
+                    <Behaviors:KeyTrigger Modifiers="Ctrl" Key="F">
+                        <Behaviors:InvokeCommandAction Command="{Binding OpenSearch}"/>
+                    </Behaviors:KeyTrigger>
+                    <Behaviors:KeyTrigger Modifiers="Ctrl" Key="S">
+                        <Behaviors:InvokeCommandAction Command="{Binding Save}"/>
+                    </Behaviors:KeyTrigger>
+                </Behaviors:Interaction.Triggers>
+                
+                <RichTextBox.ContextMenu>
+                    <ContextMenu>
+                        
+                        <ContextMenu.Template>
+                            <ControlTemplate TargetType="ContextMenu">
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <StackPanel Orientation="Vertical" Background="White">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                            <ComboBox ItemsSource="{Binding Editor.FontSizes.Sizes}" SelectedItem="{Binding Editor.SelectedSize}"  Width="40"/>
+                                            <ComboBox ItemsSource="{Binding Editor.FontFamilies.Families}" SelectedItem="{Binding Editor.SelectedFamily}" Width="80">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Source}" FontFamily="{Binding}"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                             <xctk:ColorPicker SelectedColor="{Binding Editor.SelectedColor}" Width="40"/>
+                                            <Button Width="20" Command="EditingCommands.ToggleBold">
+                                                
+                                                <TextBlock Text="F" FontWeight="Bold" FontSize="12"/>
+                                            </Button>
+                                            <Button Width="20" Command="EditingCommands.ToggleItalic">
+                                                <TextBlock Text="K" FontStyle="Italic" FontSize="12"/>
+                                            </Button>
+                                            <Button Width="20" Command="EditingCommands.ToggleUnderline">
+                                                <TextBlock Text="A" TextDecorations="Underline" FontSize="12"/>
+                                            </Button>
+                                            <Button Width="20" Command="EditingCommands.ToggleBullets">
+                                                <TextBlock Text="●" FontWeight="Bold" FontSize="12"/>
+                                            </Button>
+                                        </StackPanel>
+                                        <MenuItem Header="Undo" Command="ApplicationCommands.Undo"/>
+                                        <MenuItem Header="Redo" Command="ApplicationCommands.Redo"/>
+                                        <Separator/>
+                                        <MenuItem Header="Cut" Command="ApplicationCommands.Cut">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource Cut}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Copy"   Command="ApplicationCommands.Copy">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource Copy}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Paste"  Command="ApplicationCommands.Paste">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource Paste}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <MenuItem Header="Delete" Command="EditingCommands.Delete">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource Delete}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator/>
+                                        <MenuItem Header="Select All" Command="ApplicationCommands.SelectAll"/>
+                                        <MenuItem Header="Search..." Command="{Binding OpenSearch}" InputGestureText="Ctrl+F">
+                                            <MenuItem.Icon>
+                                                <Image Source="{StaticResource Find}"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                        <Separator/>
+                                        <MenuItem Header="Save" Command="{Binding Save}" InputGestureText="Ctrl+S" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </ContextMenu.Template>
+                    </ContextMenu>
+                </RichTextBox.ContextMenu>
+            </xctk:RichTextBox>
+            
+            <Border BorderBrush="Black" BorderThickness="1" Width="250" Visibility="{Binding SearchBarVisible}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,17,0">
+                <StackPanel Orientation="Vertical" Background="White" >
+                    <TextBlock Text="Insert text to search." FontSize="13" Margin="5,5,5,5"/>
+                    <TextBox Text="{Binding SearchTextField}" FontSize="13" Margin="5,0,5,5"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,2">
+                        <TextBlock Text="Regular Expression "/>
+                        <CheckBox IsChecked="{Binding UseRegEx}" />
+                    </StackPanel>
+                    <Grid>
+                        <TextBlock Text="{Binding SearchResultsFound}" HorizontalAlignment="Left"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Next" Margin="0,0,5,5" Command="{Binding Search}" />
+                            <Button Content="Cancel" Margin="0,0,5,5" Command="{Binding CloseSearch}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
+</UserControl>
